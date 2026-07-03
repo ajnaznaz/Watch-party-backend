@@ -4,9 +4,13 @@ const { Server } = require('socket.io');
 const { ExpressPeerServer } = require('peer');
 const cors = require('cors');
 
-const app = express();
+const allowedOrigins = (origin, callback) => {
+  // Allow all origins for the watch party to work easily across Vercel/Railway
+  callback(null, true);
+};
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: allowedOrigins,
   methods: ['GET', 'POST'],
   credentials: true
 }));
@@ -18,7 +22,7 @@ const server = http.createServer(app);
 // Socket.io setup
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: allowedOrigins,
     methods: ['GET', 'POST'],
     credentials: true
   }
