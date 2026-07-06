@@ -88,7 +88,8 @@ io.on('connection', (socket) => {
           isPlaying: false,
           currentTime: 0,
           playbackSpeed: 1,
-          lastUpdate: Date.now()
+          lastUpdate: Date.now(),
+          movieName: null
         },
         messages: [],
         reactions: []
@@ -129,6 +130,16 @@ io.on('connection', (socket) => {
   });
 
   // Movie sync events
+  socket.on('movie-selected', (data) => {
+    if (!currentRoom) return;
+
+    const room = rooms.get(currentRoom);
+    if (room) {
+      room.movieState.movieName = data.movieName;
+      socket.to(currentRoom).emit('movie-selected', data);
+    }
+  });
+
   socket.on('movie-play', (data) => {
     if (!currentRoom) return;
 
