@@ -4,6 +4,8 @@ const { Server } = require('socket.io');
 const { ExpressPeerServer } = require('peer');
 const cors = require('cors');
 
+const app = express();
+
 const allowedOrigins = (origin, callback) => {
   // Allow all origins for the watch party to work easily across Vercel/Railway
   callback(null, true);
