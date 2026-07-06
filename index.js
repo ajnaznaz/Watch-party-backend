@@ -89,6 +89,7 @@ io.on('connection', (socket) => {
           currentTime: 0,
           playbackSpeed: 1,
           lastUpdate: Date.now(),
+          duration: 0,
           movieName: null
         },
         messages: [],
@@ -137,6 +138,16 @@ io.on('connection', (socket) => {
     if (room) {
       room.movieState.movieName = data.movieName;
       socket.to(currentRoom).emit('movie-selected', data);
+    }
+  });
+
+  socket.on('movie-duration', (data) => {
+    if (!currentRoom) return;
+
+    const room = rooms.get(currentRoom);
+    if (room) {
+      room.movieState.duration = data.duration;
+      socket.to(currentRoom).emit('movie-duration', data);
     }
   });
 
